@@ -69,13 +69,6 @@ class NotificationManager: NSObject {
         }
         
         print("📱 Fallback notification systems initialized - Visual alerts: \(useVisualAlerts), Legacy: \(canUseLegacyNotifications)")
-        
-        // Show a startup notification to confirm fallback is working
-        print("📱 Scheduling test notification in 2 seconds...")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
-            print("📱 Executing test notification...")
-            self?.sendTestNotification()
-        }
     }
     
     private func testLegacyNotifications() {
@@ -85,29 +78,9 @@ class NotificationManager: NSObject {
             let center = centerClass.default
             center.delegate = self as? NSUserNotificationCenterDelegate
             print("📱 Legacy notification center delegate set")
-            
-            // Test legacy notification system
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-                self?.sendLegacyNotification(
-                    title: "Duman Test", 
-                    message: "Legacy notification system test", 
-                    notificationKey: "test"
-                )
-            }
         }
     }
     
-    private func sendTestNotification() {
-        print("📱 Sending test notification to verify fallback system...")
-        
-        // Get server count safely
-        let serverCount = getEnabledServerCount()
-        
-        sendSystemAlert(
-            title: "Duman Server Monitor",
-            message: "Notification system initialized successfully. Monitoring \(serverCount) servers."
-        )
-    }
     
     private func getEnabledServerCount() -> Int {
         // Try to get server count from ServerManager if available
