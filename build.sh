@@ -5,7 +5,8 @@ echo "🎨 Building transparent icon for macOS Tahoe..."
 # Configuration
 APP_NAME="Duman.app"
 BINARY_NAME="Duman"
-ICON_SOURCE_PNG="icon/logo.png"
+APP_ICON_SOURCE_PNG="icon/appIcon.png" # Main app icon
+MENUBAR_ICON_SOURCE_PNG="icon/logo.png" # Taskbar/menu bar icon
 ICONSET_DIR="icon/Duman.iconset"
 ICNS_NAME="Duman.icns"
 
@@ -15,14 +16,18 @@ rm -rf "${APP_NAME}"
 rm -rf "${ICONSET_DIR}"
 
 # Verify source PNG exists and has transparency
-if [ ! -f "${ICON_SOURCE_PNG}" ]; then
-    echo "❌ Source PNG not found: ${ICON_SOURCE_PNG}"
+if [ ! -f "${APP_ICON_SOURCE_PNG}" ]; then
+    echo "❌ App icon source PNG not found: ${APP_ICON_SOURCE_PNG}"
+    exit 1
+fi
+if [ ! -f "${MENUBAR_ICON_SOURCE_PNG}" ]; then
+    echo "❌ Menu bar icon source PNG not found: ${MENUBAR_ICON_SOURCE_PNG}"
     exit 1
 fi
 
 # Check PNG properties
 echo "🔍 Verifying source PNG transparency..."
-png_info=$(file "${ICON_SOURCE_PNG}")
+png_info=$(file "${APP_ICON_SOURCE_PNG}")
 echo "📊 PNG info: $png_info"
 
 if [[ $png_info == *"RGBA"* ]]; then
@@ -85,6 +90,19 @@ else
     echo "⚠️ Entitlements file not found"
 fi
 
+# Generate and copy menu bar icons
+echo "🖼️  Generating menu bar icons..."
+mkdir -p "${APP_NAME}/Contents/Resources"
+resize_png_with_transparency 16 "${MENUBAR_ICON_SOURCE_PNG}" "${APP_NAME}/Contents/Resources/MenuBarIcon_16.png"
+resize_png_with_transparency 32 "${MENUBAR_ICON_SOURCE_PNG}" "${APP_NAME}/Contents/Resources/MenuBarIcon_16@2x.png"
+
+if [ -f "${APP_NAME}/Contents/Resources/MenuBarIcon_16.png" ] && [ -f "${APP_NAME}/Contents/Resources/MenuBarIcon_16@2x.png" ]; then
+    echo "✅ Menu bar icons generated successfully"
+else
+    echo "❌ Failed to generate menu bar icons"
+    exit 1
+fi
+
 # Create complete iconset for macOS Tahoe
 echo "🖼️  Creating complete iconset for macOS Tahoe..."
 mkdir -p "${ICONSET_DIR}"
@@ -106,7 +124,7 @@ declare -a sizes=(
 echo "📐 Generating all required icon sizes..."
 for size_info in "${sizes[@]}"; do
     IFS=':' read -r size filename <<< "$size_info"
-    resize_png_with_transparency $size "${ICON_SOURCE_PNG}" "${ICONSET_DIR}/${filename}"
+    resize_png_with_transparency $size "${APP_ICON_SOURCE_PNG}" "${ICONSET_DIR}/${filename}"
 done
 
 # Verify iconset completeness
