@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleIdentifier</key>
+    <string>com.altan.Duman</string>
+    <key>CFBundleName</key>
+    <string>Duman</string>
+    <key>CFBundleDisplayName</key>
+    <string>Duman Server Monitor</string>
+    <key>CFBundleVersion</key>
+    <string>1.0</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>12.0</string>
+    <key>NSHighResolutionCapable</key>
+    <true/>
+    <key>LSUIElement</key>
+    <true/>
+    <!-- Notification settings for unsigned apps -->
+    <key>NSUserNotificationAlertStyle</key>
+    <string>alert</string>
+    <key>NSSupportsUserNotifications</key>
+    <true/>
+    <!-- Allow background execution for notifications -->
+    <key>LSBackgroundOnly</key>
+    <false/>
+    <!-- Request notification permissions -->
+    <key>NSUserNotificationUsageDescription</key>
+    <string>Duman needs notification permissions to alert you about server status changes, performance issues, and system events.</string>
+    <!-- Application Icon -->
+    <key>CFBundleIconFile</key>
+    <string>Duman</string>
+</dict>
+</plist>
