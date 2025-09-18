@@ -11,6 +11,7 @@
 # They are generated when you build and should not be in source control.
 build/
 DerivedData/
+.build/
 *.app
 
 ### User-Specific Xcode Files ###
@@ -19,6 +20,10 @@ DerivedData/
 *.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
 *.xcodeproj/xcuserdata/
 *.xcworkspace/xcuserdata/
+
+### Editor-specific ###
+# VSCode user settings
+.vscode/
 
 ### Swift Package Manager ###
 # Ignore local package caches and build artifacts.
