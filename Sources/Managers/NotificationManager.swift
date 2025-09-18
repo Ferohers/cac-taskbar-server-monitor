@@ -82,16 +82,6 @@ class NotificationManager: NSObject {
     }
     
     
-    private func getEnabledServerCount() -> Int {
-        // Try to get server count from ServerManager if available
-        if let serverManagerClass = NSClassFromString("ServerManager") as? NSObject.Type,
-           let shared = serverManagerClass.value(forKey: "shared") as? NSObject,
-           let servers = shared.value(forKey: "getAllServers") as? [Any] {
-            return servers.count
-        }
-        return 0
-    }
-    
     
     // MARK: - Permission Management
     

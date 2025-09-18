@@ -11,7 +11,7 @@ class DependencyInjectionExample {
         // Access managers through protocols
         let serverManager = container.serverManager
         let credentialManager = container.credentialManager
-        let settingsManager = container.settingsManager
+        _ = container.settingsManager // Used for demonstration
         
         // Example server creation
         let server = ServerConfig(

@@ -18,7 +18,7 @@ enum AppError: LocalizedError, Equatable {
         case .serverConnectionFailed(let message):
             return "Failed to connect to server: \(message)"
         case .credentialError(let error):
-            return "Credential error: \(error.localizedDescription ?? "Unknown credential error")"
+            return "Credential error: \(error.localizedDescription)"
         case .configurationError(let message):
             return "Configuration error: \(message)"
         case .networkError(let message):
@@ -30,7 +30,7 @@ enum AppError: LocalizedError, Equatable {
         case .authenticationFailed(let message):
             return "Authentication failed: \(message)"
         case .sshError(let error):
-            return "SSH error: \(error.localizedDescription ?? "Unknown SSH error")"
+            return "SSH error: \(error.localizedDescription)"
         case .monitoringError(let message):
             return "Monitoring error: \(message)"
         case .notificationError(let message):

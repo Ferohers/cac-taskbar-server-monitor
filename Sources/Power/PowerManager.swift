@@ -5,9 +5,8 @@ import Cocoa
 
 class PowerManager {
     static let shared = PowerManager()
-    
     private var isLowPowerMode = false
-    private var backgroundActivityID: NSObject?
+    
     
     private init() {
         setupPowerManagement()
