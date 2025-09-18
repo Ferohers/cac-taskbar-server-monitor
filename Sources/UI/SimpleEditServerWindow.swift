@@ -41,7 +41,11 @@ class SimpleEditServerWindow: NSWindowController, NSWindowDelegate {
         
         window.title = "Edit Server"
         window.center()
+        window.delegate = self
         
+        // Configure window for proper text editing
+        window.makeFirstResponder(nil)
+        window.acceptsMouseMovedEvents = true
         // Set delegate to handle window closing
         window.delegate = self
         
@@ -50,21 +54,27 @@ class SimpleEditServerWindow: NSWindowController, NSWindowDelegate {
         
         nameField = NSTextField()
         nameField.placeholderString = "Server Name"
+        configureTextField(nameField)
         
         hostField = NSTextField()
         hostField.placeholderString = "Hostname or IP"
+        configureTextField(hostField)
         
         userField = NSTextField()
         userField.placeholderString = "Username"
+        configureTextField(userField)
         
         passField = NSSecureTextField()
         passField.placeholderString = "Password (optional)"
+        configureTextField(passField)
         
         keyField = NSTextField()
         keyField.placeholderString = "SSH Key Path (optional)"
+        configureTextField(keyField)
         
         portField = NSTextField()
         portField.placeholderString = "Port"
+        configureTextField(portField)
         
         let browseButton = NSButton(title: "Browse...", target: self, action: #selector(browseButtonClicked))
         browseButton.bezelStyle = .rounded
@@ -118,6 +128,41 @@ class SimpleEditServerWindow: NSWindowController, NSWindowDelegate {
             
             saveButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
+    }
+    
+    private func configureTextField(_ textField: NSTextField) {
+        // Ensure we have a proper text field cell
+        if !(textField.cell is NSTextFieldCell) {
+            textField.cell = NSTextFieldCell()
+        }
+        
+        // Configure the text field
+        textField.isEditable = true
+        textField.isSelectable = true
+        textField.isBordered = true
+        textField.isBezeled = true
+        textField.bezelStyle = .roundedBezel
+        textField.drawsBackground = true
+        textField.backgroundColor = NSColor.textBackgroundColor
+        textField.usesSingleLineMode = true
+        textField.lineBreakMode = .byTruncatingTail
+        textField.allowsEditingTextAttributes = false
+        textField.importsGraphics = false
+        textField.refusesFirstResponder = false
+        
+        // Configure the cell for proper text editing
+        if let cell = textField.cell as? NSTextFieldCell {
+            cell.isEditable = true
+            cell.isSelectable = true
+            cell.isScrollable = true
+            cell.wraps = false
+            cell.usesSingleLineMode = true
+            cell.sendsActionOnEndEditing = true
+        }
+        
+        // Enable standard editing menu items
+        textField.target = nil
+        textField.action = nil
     }
     
     private func populateFields() {
