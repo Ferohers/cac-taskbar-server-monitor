@@ -1,0 +1,551 @@
+{
+  "builtTestProducts" : [
+
+  ],
+  "copyCommands" : {
+
+  },
+  "explicitTargetDependencyImportCheckingMode" : {
+    "none" : {
+
+    }
+  },
+  "generatedSourceTargetSet" : [
+
+  ],
+  "pluginDescriptions" : [
+
+  ],
+  "swiftCommands" : {
+    "C.Duman-arm64-apple-macosx26.0-release.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/sources",
+      "importPath" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/AppDelegate.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Controllers/MenuBarController.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Managers/KeychainManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Managers/NotificationManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Managers/ServerManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Managers/ServerMonitor.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Managers/SettingsManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Models/NotificationSettings.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Models/ServerConfig.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Network/SSHClient.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Resources/Assets.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/UI/NotificationsSettingsView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/UI/SettingsWindow.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/UI/SimpleAddServerWindow.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/UI/SimpleConfigWindow.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/UI/SimpleEditServerWindow.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/main.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/sources"
+        }
+      ],
+      "isLibrary" : false,
+      "moduleName" : "Duman",
+      "moduleOutputPath" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Modules/Duman.swiftmodule",
+      "objects" : [
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/AppDelegate.swift.o",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/MenuBarController.swift.o",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/KeychainManager.swift.o",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/NotificationManager.swift.o",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/ServerManager.swift.o",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/ServerMonitor.swift.o",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/SettingsManager.swift.o",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/NotificationSettings.swift.o",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/ServerConfig.swift.o",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/SSHClient.swift.o",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/Assets.swift.o",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/NotificationsSettingsView.swift.o",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/SettingsWindow.swift.o",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/SimpleAddServerWindow.swift.o",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/SimpleConfigWindow.swift.o",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/SimpleEditServerWindow.swift.o",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/main.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx13.0",
+        "-whole-module-optimization",
+        "-num-threads",
+        "8",
+        "-serialize-diagnostics",
+        "-O",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/ModuleCache",
+        "-parseable-output",
+        "-Xfrontend",
+        "-entry-point-function-name",
+        "-Xfrontend",
+        "Duman_main",
+        "-color-diagnostics",
+        "-swift-version",
+        "5",
+        "-DRELEASE",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "cac_taskbar_server_monitor"
+      ],
+      "outputFileMapPath" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/AppDelegate.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/MenuBarController.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/KeychainManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/NotificationManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/ServerManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/ServerMonitor.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/SettingsManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/NotificationSettings.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/ServerConfig.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/SSHClient.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/Assets.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/NotificationsSettingsView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/SettingsWindow.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/SimpleAddServerWindow.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/SimpleConfigWindow.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/SimpleEditServerWindow.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/main.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Modules/Duman.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/AppDelegate.swift",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Controllers/MenuBarController.swift",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Managers/KeychainManager.swift",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Managers/NotificationManager.swift",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Managers/ServerManager.swift",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Managers/ServerMonitor.swift",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Managers/SettingsManager.swift",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Models/NotificationSettings.swift",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Models/ServerConfig.swift",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Network/SSHClient.swift",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Resources/Assets.swift",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/UI/NotificationsSettingsView.swift",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/UI/SettingsWindow.swift",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/UI/SimpleAddServerWindow.swift",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/UI/SimpleConfigWindow.swift",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/UI/SimpleEditServerWindow.swift",
+        "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/main.swift"
+      ],
+      "tempsPath" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build",
+      "wholeModuleOptimization" : true
+    }
+  },
+  "swiftFrontendCommands" : {
+
+  },
+  "swiftTargetScanArgs" : {
+    "Duman" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "Duman",
+      "-package-name",
+      "cac_taskbar_server_monitor",
+      "-c",
+      "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/AppDelegate.swift",
+      "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Controllers/MenuBarController.swift",
+      "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Managers/KeychainManager.swift",
+      "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Managers/NotificationManager.swift",
+      "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Managers/ServerManager.swift",
+      "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Managers/ServerMonitor.swift",
+      "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Managers/SettingsManager.swift",
+      "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Models/NotificationSettings.swift",
+      "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Models/ServerConfig.swift",
+      "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Network/SSHClient.swift",
+      "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Resources/Assets.swift",
+      "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/UI/NotificationsSettingsView.swift",
+      "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/UI/SettingsWindow.swift",
+      "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/UI/SimpleAddServerWindow.swift",
+      "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/UI/SimpleConfigWindow.swift",
+      "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/UI/SimpleEditServerWindow.swift",
+      "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/main.swift",
+      "-I",
+      "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Modules",
+      "-target",
+      "arm64-apple-macosx13.0",
+      "-whole-module-optimization",
+      "-num-threads",
+      "8",
+      "-serialize-diagnostics",
+      "-O",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/ModuleCache",
+      "-parseable-output",
+      "-Xfrontend",
+      "-entry-point-function-name",
+      "-Xfrontend",
+      "Duman_main",
+      "-color-diagnostics",
+      "-swift-version",
+      "5",
+      "-DRELEASE",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "cac_taskbar_server_monitor",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ]
+  },
+  "targetDependencyMap" : {
+    "Duman" : [
+
+    ]
+  },
+  "testDiscoveryCommands" : {
+
+  },
+  "testEntryPointCommands" : {
+
+  },
+  "traitConfiguration" : {
+    "default" : {
+
+    }
+  },
+  "writeCommands" : {
+    "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/AppDelegate.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Controllers/MenuBarController.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Managers/KeychainManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Managers/NotificationManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Managers/ServerManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Managers/ServerMonitor.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Managers/SettingsManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Models/NotificationSettings.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Models/ServerConfig.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Network/SSHClient.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Resources/Assets.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/UI/NotificationsSettingsView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/UI/SettingsWindow.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/UI/SimpleAddServerWindow.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/UI/SimpleConfigWindow.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/UI/SimpleEditServerWindow.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/main.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/sources"
+    },
+    "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.product/Objects.LinkFileList" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<link-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/AppDelegate.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/Assets.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/KeychainManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/MenuBarController.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/NotificationManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/NotificationSettings.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/NotificationsSettingsView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/SSHClient.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/ServerConfig.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/ServerManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/ServerMonitor.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/SettingsManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/SettingsWindow.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/SimpleAddServerWindow.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/SimpleConfigWindow.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/SimpleEditServerWindow.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.build/main.swift.o"
+        }
+      ],
+      "outputFilePath" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/Duman.product/Objects.LinkFileList"
+    },
+    "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/swift-version--58304C5D6DBC2206.txt" : {
+      "alwaysOutOfDate" : true,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<swift-get-version>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+        }
+      ],
+      "outputFilePath" : "/Users/altan/Desktop/cac-taskbar-server-monitor/.build/arm64-apple-macosx/release/swift-version--58304C5D6DBC2206.txt"
+    }
+  }
+}

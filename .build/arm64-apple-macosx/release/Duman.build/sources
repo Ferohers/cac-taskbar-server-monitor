@@ -1,0 +1,17 @@
+/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/AppDelegate.swift
+/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Controllers/MenuBarController.swift
+/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Managers/KeychainManager.swift
+/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Managers/NotificationManager.swift
+/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Managers/ServerManager.swift
+/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Managers/ServerMonitor.swift
+/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Managers/SettingsManager.swift
+/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Models/NotificationSettings.swift
+/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Models/ServerConfig.swift
+/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Network/SSHClient.swift
+/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/Resources/Assets.swift
+/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/UI/NotificationsSettingsView.swift
+/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/UI/SettingsWindow.swift
+/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/UI/SimpleAddServerWindow.swift
+/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/UI/SimpleConfigWindow.swift
+/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/UI/SimpleEditServerWindow.swift
+/Users/altan/Desktop/cac-taskbar-server-monitor/Sources/main.swift
