@@ -1,0 +1,34 @@
+# Created by Gemini Code Assist
+#
+# This file tells Git which files and folders to ignore in your project.
+# It's configured for a standard macOS/Swift/Xcode project.
+
+### macOS ###
+.DS_Store
+
+### Build Products ###
+# These are the compiled results of your code.
+# They are generated when you build and should not be in source control.
+build/
+DerivedData/
+*.app
+
+### User-Specific Xcode Files ###
+# These store your personal workspace settings, like open files and window positions.
+# Each developer on a team will have their own.
+*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+
+### Swift Package Manager ###
+# Ignore local package caches and build artifacts.
+.swiftpm/
+Packages/
+
+### CocoaPods ###
+# If you use CocoaPods, the Pods directory should be ignored.
+Pods/
+
+### Carthage ###
+Carthage/Build/
+Carthage/Checkouts/

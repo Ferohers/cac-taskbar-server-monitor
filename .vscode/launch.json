@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:cac-taskbar-server-monitor}",
+            "name": "Debug Duman",
+            "program": "${workspaceFolder:cac-taskbar-server-monitor}/.build/debug/Duman",
+            "preLaunchTask": "swift: Build Debug Duman"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:cac-taskbar-server-monitor}",
+            "name": "Release Duman",
+            "program": "${workspaceFolder:cac-taskbar-server-monitor}/.build/release/Duman",
+            "preLaunchTask": "swift: Build Release Duman"
+        }
+    ]
+}
