@@ -1,6 +1,6 @@
 import Foundation
 
-enum SSHError: Error, LocalizedError {
+enum SSHError: Error, LocalizedError, Equatable {
     case connectionFailed(String)
     case authenticationFailed
     case commandFailed(String)

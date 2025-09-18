@@ -1,7 +1,7 @@
 import Foundation
 import CryptoKit
 
-enum CredentialError: Error, LocalizedError {
+enum CredentialError: Error, LocalizedError, Equatable {
     case encryptionFailed
     case decryptionFailed
     case invalidKey
