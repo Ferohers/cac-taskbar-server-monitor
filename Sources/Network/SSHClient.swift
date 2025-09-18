@@ -47,12 +47,10 @@ struct NetworkInfo {
 class SSHClient {
     private var isConnected = false
     private var serverConfig: ServerConfig?
-    private let keychainManager: KeychainManager
+    private let keychainManager = KeychainManager.shared
     private var tempKeyFilePath: String?
     
-    init(keychainManager: KeychainManager = KeychainManager()) {
-        self.keychainManager = keychainManager
-    }
+    init() {}
     
     func connect(to config: ServerConfig) throws {
         serverConfig = config
@@ -464,7 +462,7 @@ class SSHClient {
     }
     
     private func buildSSHCommand(command: String, config: ServerConfig) throws -> String {
-        var sshCommand = "ssh -o ConnectTimeout=10 -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+        var sshCommand = "ssh -o ConnectTimeout=15 -o ServerAliveInterval=10 -o ServerAliveCountMax=3 -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR"
         
         // Handle SSH key authentication from keychain
         if config.hasKeychainSSHKey {

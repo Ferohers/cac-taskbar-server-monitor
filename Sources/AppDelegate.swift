@@ -7,11 +7,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var menuBarController: MenuBarController!
     var serverMonitor: ServerMonitor!
     var serverManager: ServerManager!
+    private let powerManager = PowerManager.shared
     
     private var settingsWindow: SettingsWindow?
     private var addServerWindow: SimpleAddServerWindow?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        // Initialize power management for menu bar app
+        powerManager.optimizeForMenuBarApp()
+        
+        // Request keychain permission early to avoid multiple prompts
+        let _ = KeychainManager.shared.requestKeychainPermission()
+        
         setupManagers()
         setupStatusBar()
         requestNotificationPermissions()

@@ -7,6 +7,7 @@ enum KeychainError: Error, LocalizedError {
     case invalidData
     case unexpectedError(OSStatus)
     case keyFileReadError
+    case accessDenied
     
     var errorDescription: String? {
         switch self {
@@ -20,16 +21,61 @@ enum KeychainError: Error, LocalizedError {
             return "Keychain error: \(status)"
         case .keyFileReadError:
             return "Failed to read SSH key file"
+        case .accessDenied:
+            return "Keychain access denied"
         }
     }
 }
 
 class KeychainManager {
+    static let shared = KeychainManager()
     private let serviceName = "Duman"
+    private var hasRequestedPermission = false
+    private var permissionGranted = false
+    
+    private init() {}
+    
+    // MARK: - Permission Management
+    
+    func requestKeychainPermission() -> Bool {
+        if hasRequestedPermission {
+            return permissionGranted
+        }
+        
+        print("🔐 Requesting keychain access permission...")
+        
+        // Try to access keychain with a test operation to trigger permission dialog once
+        let testQuery: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: serviceName,
+            kSecAttrAccount as String: "permission_test",
+            kSecReturnData as String: false,
+            kSecMatchLimit as String: kSecMatchLimitOne
+        ]
+        
+        let status = SecItemCopyMatching(testQuery as CFDictionary, nil)
+        hasRequestedPermission = true
+        
+        // If we get itemNotFound, that means we have permission but no item exists
+        // If we get success or duplicate, we definitely have permission
+        permissionGranted = (status == errSecItemNotFound || status == errSecSuccess || status == errSecDuplicateItem)
+        
+        if permissionGranted {
+            print("🔐 Keychain access permission granted")
+        } else {
+            print("🔐 Keychain access permission denied")
+        }
+        
+        return permissionGranted
+    }
     
     // MARK: - Password Management
     
     func storePassword(for serverID: String, password: String) throws {
+        guard requestKeychainPermission() else {
+            throw KeychainError.accessDenied
+        }
+        
         let passwordData = password.data(using: .utf8)!
         
         let query: [String: Any] = [
@@ -65,6 +111,10 @@ class KeychainManager {
     }
     
     func retrievePassword(for serverID: String) throws -> String {
+        guard requestKeychainPermission() else {
+            throw KeychainError.accessDenied
+        }
+        
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: serviceName,
@@ -107,6 +157,10 @@ class KeychainManager {
     // MARK: - SSH Key Management
     
     func storeSSHKey(for serverID: String, keyPath: String) throws {
+        guard requestKeychainPermission() else {
+            throw KeychainError.accessDenied
+        }
+        
         // Read the SSH key file
         let expandedPath = NSString(string: keyPath).expandingTildeInPath
         let keyURL = URL(fileURLWithPath: expandedPath)
@@ -150,6 +204,10 @@ class KeychainManager {
     }
     
     func retrieveSSHKey(for serverID: String) throws -> Data {
+        guard requestKeychainPermission() else {
+            throw KeychainError.accessDenied
+        }
+        
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: serviceName,

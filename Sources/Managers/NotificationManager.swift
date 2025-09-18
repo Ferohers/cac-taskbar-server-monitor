@@ -7,7 +7,6 @@ class NotificationManager: NSObject {
     static let shared = NotificationManager()
     
     private var lastNotificationTimes: [String: Date] = [:]
-    // Cooldown removed per user request
     
     // Notification system capabilities
     private var canUseUNNotifications = false
@@ -38,23 +37,88 @@ class NotificationManager: NSObject {
     }
     
     private func setupModernNotifications() {
+        // Check if we have a valid bundle identifier first
+        guard let bundleId = Bundle.main.bundleIdentifier, !bundleId.isEmpty else {
+            print("📱 No bundle identifier - skipping UNUserNotificationCenter")
+            canUseUNNotifications = false
+            setupFallbackNotifications()
+            return
+        }
+        
         UNUserNotificationCenter.current().delegate = self
         canUseUNNotifications = true
         print("📱 Modern notification system (UNUserNotificationCenter) initialized")
     }
     
     private func setupFallbackNotifications() {
-        // For unsigned apps, we'll use visual alerts as primary method
+        print("📱 Setting up fallback notification systems...")
+        
+        // For unsigned apps or when UNUserNotificationCenter fails, use alternative methods
         useVisualAlerts = true
+        print("📱 Visual alerts enabled: \(useVisualAlerts)")
         
         // Try legacy NSUserNotification as secondary fallback
         if NSClassFromString("NSUserNotification") != nil {
             canUseLegacyNotifications = true
             print("📱 Legacy notification system (NSUserNotification) available")
+            
+            // Test legacy notifications immediately
+            testLegacyNotifications()
+        } else {
+            print("📱 Legacy notification system not available")
         }
         
         print("📱 Fallback notification systems initialized - Visual alerts: \(useVisualAlerts), Legacy: \(canUseLegacyNotifications)")
+        
+        // Show a startup notification to confirm fallback is working
+        print("📱 Scheduling test notification in 2 seconds...")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+            print("📱 Executing test notification...")
+            self?.sendTestNotification()
+        }
     }
+    
+    private func testLegacyNotifications() {
+        guard canUseLegacyNotifications else { return }
+        
+        if let centerClass = NSClassFromString("NSUserNotificationCenter") as? NSUserNotificationCenter.Type {
+            let center = centerClass.default
+            center.delegate = self as? NSUserNotificationCenterDelegate
+            print("📱 Legacy notification center delegate set")
+            
+            // Test legacy notification system
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                self?.sendLegacyNotification(
+                    title: "Duman Test", 
+                    message: "Legacy notification system test", 
+                    notificationKey: "test"
+                )
+            }
+        }
+    }
+    
+    private func sendTestNotification() {
+        print("📱 Sending test notification to verify fallback system...")
+        
+        // Get server count safely
+        let serverCount = getEnabledServerCount()
+        
+        sendSystemAlert(
+            title: "Duman Server Monitor",
+            message: "Notification system initialized successfully. Monitoring \(serverCount) servers."
+        )
+    }
+    
+    private func getEnabledServerCount() -> Int {
+        // Try to get server count from ServerManager if available
+        if let serverManagerClass = NSClassFromString("ServerManager") as? NSObject.Type,
+           let shared = serverManagerClass.value(forKey: "shared") as? NSObject,
+           let servers = shared.value(forKey: "getAllServers") as? [Any] {
+            return servers.count
+        }
+        return 0
+    }
+    
     
     // MARK: - Permission Management
     
@@ -74,9 +138,17 @@ class NotificationManager: NSObject {
                     center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
                         DispatchQueue.main.async {
                             if let error = error {
+                                let nsError = error as NSError
                                 print("📱 Notification permission error: \(error.localizedDescription)")
-                                print("📱 Falling back to alternative notification methods")
+                                if nsError.domain == "UNErrorDomain" && nsError.code == 1 {
+                                    print("📱 UNErrorDomain error 1 detected - likely entitlement or signing issue")
+                                    print("📱 This is common for unsigned/development apps")
+                                    print("📱 Falling back to alternative notification methods")
+                                } else {
+                                    print("📱 Other notification error (\(nsError.domain) \(nsError.code)) - falling back to alternative methods")
+                                }
                                 self?.canUseUNNotifications = false
+                                print("📱 Initializing fallback notification systems...")
                                 self?.setupFallbackNotifications()
                             } else if granted {
                                 print("📱 Modern notification permissions granted")
@@ -147,7 +219,6 @@ class NotificationManager: NSObject {
     func sendServerAlert(title: String, message: String, serverName: String, serverID: UUID, alertType: String) {
         let notificationKey = "\(serverID.uuidString)_\(alertType)"
         
-        // Cooldown removed - send notifications immediately
         
         // Try notification systems in order of preference
         if canUseUNNotifications {
@@ -176,7 +247,6 @@ class NotificationManager: NSObject {
     func sendConnectionAlert(serverName: String, serverID: UUID, isConnected: Bool) {
         let notificationKey = "\(serverID.uuidString)_connection_\(isConnected)"
         
-        // Cooldown removed - send connection alerts immediately
         
         let title = isConnected ? "Server Connected" : "Server Disconnected"
         let message = isConnected ? 
@@ -272,7 +342,10 @@ class NotificationManager: NSObject {
     // MARK: - Legacy Notifications (NSUserNotification)
     
     private func sendLegacyNotification(title: String, message: String, notificationKey: String) {
+        print("📱 Attempting to send legacy notification: \(title)")
+        
         guard canUseLegacyNotifications else {
+            print("📱 Legacy notifications not available, falling back to visual alert")
             sendVisualAlert(title: title, message: message, notificationKey: notificationKey)
             return
         }
@@ -281,17 +354,20 @@ class NotificationManager: NSObject {
         if let notificationClass = NSClassFromString("NSUserNotification") as? NSUserNotification.Type,
            let centerClass = NSClassFromString("NSUserNotificationCenter") as? NSUserNotificationCenter.Type {
             
+            print("📱 Creating legacy notification...")
             let notification = notificationClass.init()
             notification.title = title
             notification.informativeText = message
             notification.soundName = NSUserNotificationDefaultSoundName
             
             let center = centerClass.default
-            center.deliver(notification)
             
+            // Deliver the legacy notification
+            center.deliver(notification)
             lastNotificationTimes[notificationKey] = Date()
             print("📱 Legacy notification sent: \(title)")
         } else {
+            print("📱 Legacy notification classes not found, falling back to visual alert")
             // Fallback to visual alert
             sendVisualAlert(title: title, message: message, notificationKey: notificationKey)
         }
@@ -307,14 +383,27 @@ class NotificationManager: NSObject {
             alert.alertStyle = .informational
             alert.addButton(withTitle: "OK")
             
-            // Show alert in a non-blocking way
-            if let window = NSApp.mainWindow {
-                alert.beginSheetModal(for: window) { _ in
-                    // Alert dismissed
+            // For system notifications, show less intrusively
+            if title.contains("Duman Server Monitor") {
+                // For system startup notifications, just run modal briefly
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    let response = alert.runModal()
+                    if response == .alertFirstButtonReturn {
+                        print("📱 User acknowledged system notification")
+                    }
                 }
             } else {
-                // No main window, show as modal
-                alert.runModal()
+                // For server alerts, show appropriately
+                if let window = NSApp.mainWindow {
+                    alert.beginSheetModal(for: window) { _ in
+                        // Alert dismissed
+                    }
+                } else {
+                    let response = alert.runModal()
+                    if response == .alertFirstButtonReturn {
+                        print("📱 User acknowledged alert: \(title)")
+                    }
+                }
             }
             
             self?.lastNotificationTimes[notificationKey] = Date()
@@ -327,27 +416,36 @@ class NotificationManager: NSObject {
     private func sendConsoleNotification(title: String, message: String, notificationKey: String) {
         // Enhanced console output with visual indicators
         let timestamp = DateFormatter.localizedString(from: Date(), dateStyle: .none, timeStyle: .medium)
-        let separator = String(repeating: "=", count: 50)
+        let separator = String(repeating: "=", count: 60)
         
+        print("")
         print(separator)
-        print("🚨 NOTIFICATION ALERT 🚨")
+        print("🚨 DUMAN NOTIFICATION ALERT 🚨")
         print("Time: \(timestamp)")
         print("Title: \(title)")
         print("Message: \(message)")
         print(separator)
+        print("")
         
-        // Also try to show in menu bar if possible
-        if let statusItem = NSApp.value(forKey: "statusItem") as? NSStatusItem {
-            statusItem.button?.title = "🚨"
-            
-            // Reset after 3 seconds
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                statusItem.button?.title = ""
+        // Try to show notification in menu bar title
+        DispatchQueue.main.async {
+            // Look for menu bar controller
+            if let appDelegate = NSApp.delegate as? AppDelegate,
+               let menuBarController = appDelegate.value(forKey: "menuBarController") as? AnyObject,
+               let statusItem = menuBarController.value(forKey: "statusItem") as? NSStatusItem {
+                
+                // Flash the menu bar icon
+                statusItem.button?.title = "🚨"
+                
+                // Reset after 5 seconds
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                    statusItem.button?.title = ""
+                }
             }
         }
         
         lastNotificationTimes[notificationKey] = Date()
-        print("📱 Console notification logged: \(title)")
+        print("📱 Console notification logged and menu bar updated: \(title)")
     }
     
     // MARK: - Notification Management
@@ -398,7 +496,7 @@ class NotificationManager: NSObject {
             }
         }
         
-        // Remove cooldown entries for this server
+        // Remove notification tracking entries for this server
         lastNotificationTimes = lastNotificationTimes.filter { !$0.key.hasPrefix(serverID.uuidString) }
     }
 }

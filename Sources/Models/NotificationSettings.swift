@@ -35,6 +35,8 @@ struct ServerNotificationSettings: Codable, Identifiable {
 
 struct AdvancedSettings: Codable {
     var showInactiveDockerContainers: Bool = false
+    var customRefreshEnabled: Bool = false
+    var refreshIntervalSeconds: Double = 30.0 // Default 30 seconds
     
     init() {}
 }

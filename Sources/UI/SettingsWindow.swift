@@ -22,6 +22,9 @@ class SettingsWindow: NSWindowController {
     
     // Advanced settings
     private var showInactiveContainersCheckbox: NSButton!
+    private var customRefreshCheckbox: NSButton!
+    private var refreshSlider: NSSlider!
+    private var refreshValueLabel: NSTextField!
     
     // Child windows
     private var addServerWindow: SimpleAddServerWindow?
@@ -364,6 +367,84 @@ class SettingsWindow: NSWindowController {
         explanationLabel.translatesAutoresizingMaskIntoConstraints = false
         stackView.addArrangedSubview(explanationLabel)
         
+        // Add spacing
+        let spacer1 = NSView()
+        spacer1.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        stackView.addArrangedSubview(spacer1)
+        
+        // Refresh Interval Section
+        let refreshSectionLabel = NSTextField(labelWithString: "Custom Refresh Interval")
+        refreshSectionLabel.font = NSFont.boldSystemFont(ofSize: 16)
+        refreshSectionLabel.alignment = .center
+        stackView.addArrangedSubview(refreshSectionLabel)
+        
+        customRefreshCheckbox = NSButton(checkboxWithTitle: "Enable custom refresh interval", target: self, action: #selector(toggleCustomRefresh))
+        customRefreshCheckbox.toolTip = "Enable custom refresh interval for server metrics monitoring"
+        stackView.addArrangedSubview(customRefreshCheckbox)
+        
+        // Refresh interval slider container
+        let sliderContainer = NSView()
+        sliderContainer.translatesAutoresizingMaskIntoConstraints = false
+        stackView.addArrangedSubview(sliderContainer)
+        
+        // Refresh interval slider
+        refreshSlider = NSSlider(target: self, action: #selector(refreshSliderChanged))
+        refreshSlider.minValue = 7.0  // 7 seconds
+        refreshSlider.maxValue = 600.0  // 10 minutes
+        refreshSlider.doubleValue = 30.0  // Default 30 seconds
+        refreshSlider.numberOfTickMarks = 0
+        refreshSlider.isContinuous = true
+        refreshSlider.translatesAutoresizingMaskIntoConstraints = false
+        sliderContainer.addSubview(refreshSlider)
+        
+        // Labels for min/max values
+        let minLabel = NSTextField(labelWithString: "7s")
+        minLabel.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
+        minLabel.textColor = .secondaryLabelColor
+        minLabel.translatesAutoresizingMaskIntoConstraints = false
+        sliderContainer.addSubview(minLabel)
+        
+        let maxLabel = NSTextField(labelWithString: "10m")
+        maxLabel.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
+        maxLabel.textColor = .secondaryLabelColor
+        maxLabel.translatesAutoresizingMaskIntoConstraints = false
+        sliderContainer.addSubview(maxLabel)
+        
+        // Current value label
+        refreshValueLabel = NSTextField(labelWithString: "30 seconds")
+        refreshValueLabel.font = NSFont.systemFont(ofSize: NSFont.systemFontSize)
+        refreshValueLabel.alignment = .center
+        refreshValueLabel.translatesAutoresizingMaskIntoConstraints = false
+        sliderContainer.addSubview(refreshValueLabel)
+        
+        // Refresh explanation
+        let refreshExplanationLabel = NSTextField(wrappingLabelWithString: "When enabled, you can customize how often the app checks your servers for updates. Lower values provide more real-time monitoring but may increase server load. Higher values reduce load but updates will be less frequent.")
+        refreshExplanationLabel.textColor = .secondaryLabelColor
+        refreshExplanationLabel.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
+        refreshExplanationLabel.alignment = .center
+        refreshExplanationLabel.translatesAutoresizingMaskIntoConstraints = false
+        stackView.addArrangedSubview(refreshExplanationLabel)
+        
+        // Layout constraints for slider container
+        NSLayoutConstraint.activate([
+            sliderContainer.widthAnchor.constraint(equalToConstant: 400),
+            sliderContainer.heightAnchor.constraint(equalToConstant: 60),
+            
+            minLabel.leadingAnchor.constraint(equalTo: sliderContainer.leadingAnchor),
+            minLabel.centerYAnchor.constraint(equalTo: refreshSlider.centerYAnchor),
+            
+            maxLabel.trailingAnchor.constraint(equalTo: sliderContainer.trailingAnchor),
+            maxLabel.centerYAnchor.constraint(equalTo: refreshSlider.centerYAnchor),
+            
+            refreshSlider.leadingAnchor.constraint(equalTo: minLabel.trailingAnchor, constant: 10),
+            refreshSlider.trailingAnchor.constraint(equalTo: maxLabel.leadingAnchor, constant: -10),
+            refreshSlider.topAnchor.constraint(equalTo: sliderContainer.topAnchor, constant: 5),
+            
+            refreshValueLabel.centerXAnchor.constraint(equalTo: refreshSlider.centerXAnchor),
+            refreshValueLabel.topAnchor.constraint(equalTo: refreshSlider.bottomAnchor, constant: 5),
+            refreshValueLabel.bottomAnchor.constraint(equalTo: sliderContainer.bottomAnchor, constant: -5)
+        ])
+        
         NSLayoutConstraint.activate([
             // Center the stack view vertically and horizontally
             stackView.centerXAnchor.constraint(equalTo: documentView.centerXAnchor),
@@ -374,6 +455,7 @@ class SettingsWindow: NSWindowController {
             stackView.trailingAnchor.constraint(lessThanOrEqualTo: documentView.trailingAnchor, constant: -40),
             
             explanationLabel.widthAnchor.constraint(equalToConstant: 400),
+            refreshExplanationLabel.widthAnchor.constraint(equalToConstant: 400),
             
             // Set document view width to match scroll view
             documentView.widthAnchor.constraint(equalTo: advancedContentView.widthAnchor),
@@ -385,6 +467,10 @@ class SettingsWindow: NSWindowController {
         // Load current settings
         let advancedSettings = settingsManager.getAdvancedSettings()
         showInactiveContainersCheckbox.state = advancedSettings.showInactiveDockerContainers ? .on : .off
+        customRefreshCheckbox.state = advancedSettings.customRefreshEnabled ? .on : .off
+        refreshSlider.doubleValue = advancedSettings.refreshIntervalSeconds
+        updateRefreshControls()
+        updateRefreshValueLabel()
     }
     
     // MARK: - Data Loading
@@ -510,6 +596,60 @@ class SettingsWindow: NSWindowController {
         if let appDelegate = NSApp.delegate as? AppDelegate {
             appDelegate.restartMonitoring()
         }
+    }
+    
+    @objc private func toggleCustomRefresh(_ sender: NSButton) {
+        var advancedSettings = settingsManager.getAdvancedSettings()
+        advancedSettings.customRefreshEnabled = sender.state == .on
+        settingsManager.saveAdvancedSettings(advancedSettings)
+        
+        updateRefreshControls()
+        
+        // Notify app delegate to restart monitoring with new interval
+        if let appDelegate = NSApp.delegate as? AppDelegate {
+            appDelegate.restartMonitoring()
+        }
+    }
+    
+    @objc private func refreshSliderChanged(_ sender: NSSlider) {
+        var advancedSettings = settingsManager.getAdvancedSettings()
+        advancedSettings.refreshIntervalSeconds = sender.doubleValue
+        settingsManager.saveAdvancedSettings(advancedSettings)
+        
+        updateRefreshValueLabel()
+        
+        // Only restart monitoring if custom refresh is enabled
+        if advancedSettings.customRefreshEnabled {
+            if let appDelegate = NSApp.delegate as? AppDelegate {
+                appDelegate.restartMonitoring()
+            }
+        }
+    }
+    
+    private func updateRefreshControls() {
+        let advancedSettings = settingsManager.getAdvancedSettings()
+        let isEnabled = advancedSettings.customRefreshEnabled
+        
+        refreshSlider.isEnabled = isEnabled
+        refreshValueLabel.textColor = isEnabled ? .labelColor : .disabledControlTextColor
+    }
+    
+    private func updateRefreshValueLabel() {
+        let value = refreshSlider.doubleValue
+        let text: String
+        
+        if value < 60 {
+            text = String(format: "%.0f seconds", value)
+        } else {
+            let minutes = value / 60
+            if minutes < 10 {
+                text = String(format: "%.1f minutes", minutes)
+            } else {
+                text = String(format: "%.0f minutes", minutes)
+            }
+        }
+        
+        refreshValueLabel.stringValue = text
     }
     
     private func showAlert(_ title: String, _ message: String) {

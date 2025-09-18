@@ -3,61 +3,172 @@ import Foundation
 class ServerMonitor {
     private var servers: [ServerData] = []
     private var monitoringTimer: Timer?
-    private let updateInterval: TimeInterval = 30.0 // Update every 30 seconds
+    private var updateInterval: TimeInterval = 30.0 // Default 30 seconds, now configurable
     private let settingsManager = SettingsManager.shared
+    private let powerManager = PowerManager.shared
+    private var backgroundActivity: NSObjectProtocol?
     
     var onDataUpdate: (([ServerData]) -> Void)?
     
     func startMonitoring(servers configs: [ServerConfig]) {
         stopMonitoring()
         
+        // Load custom refresh settings with power management
+        let advancedSettings = settingsManager.getAdvancedSettings()
+        if advancedSettings.customRefreshEnabled {
+            updateInterval = max(7.0, min(600.0, advancedSettings.refreshIntervalSeconds))
+        } else {
+            // Use power-aware default interval
+            updateInterval = powerManager.recommendedMonitoringInterval
+        }
+        
         // Initialize server data only for enabled servers
         let enabledConfigs = configs.filter { $0.isEnabled }
         self.servers = enabledConfigs.map { ServerData(config: $0) }
         
+        // Setup power state monitoring
+        setupPowerStateObservers()
+        
         // Start monitoring only if there are enabled servers
         if !self.servers.isEmpty {
+            print("🚀 Starting monitoring for \(self.servers.count) servers")
+            
+            // Begin background activity for monitoring
+            backgroundActivity = powerManager.beginBackgroundActivity(reason: "Server monitoring")
+            
+            // Perform initial check
             performMonitoringCheck()
             
-            monitoringTimer = Timer.scheduledTimer(withTimeInterval: updateInterval, repeats: true) { [weak self] _ in
-                self?.performMonitoringCheck()
-            }
+            // Create timer for subsequent checks
+            createPowerEfficientTimer()
         } else {
+            print("⚠️ No enabled servers to monitor")
             // No enabled servers, just notify with empty array
             onDataUpdate?([])
         }
+    }
+    
+    private func setupPowerStateObservers() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(powerStateChanged),
+            name: NSNotification.Name("PowerManager.LowPowerModeEnabled"),
+            object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(powerStateChanged),
+            name: NSNotification.Name("PowerManager.LowPowerModeDisabled"),
+            object: nil
+        )
+    }
+    
+    @objc private func powerStateChanged() {
+        // Adjust monitoring interval based on power state
+        let newInterval = powerManager.recommendedMonitoringInterval
+        if abs(newInterval - updateInterval) > 1.0 {
+            updateInterval = newInterval
+            recreateTimer()
+            print("🔋 Monitoring interval adjusted to \(updateInterval)s for power efficiency")
+        }
+    }
+    
+    private func createPowerEfficientTimer() {
+        print("⚡ Creating timer with interval: \(updateInterval)s")
+        
+        // Create timer on main queue to ensure it fires properly
+        monitoringTimer = Timer.scheduledTimer(withTimeInterval: updateInterval, repeats: true) { [weak self] timer in
+            print("⏰ Timer fired! Starting monitoring check...")
+            self?.performPowerEfficientMonitoringCheck()
+        }
+        
+        // Add to main run loop to ensure it fires
+        if let timer = monitoringTimer {
+            RunLoop.main.add(timer, forMode: .common)
+        }
+        
+        // Set timer tolerance for power efficiency
+        monitoringTimer?.tolerance = updateInterval * 0.1  // 10% tolerance
+        
+        print("⚡ Timer created and added to main run loop with interval: \(updateInterval)s")
+    }
+    
+    private func recreateTimer() {
+        monitoringTimer?.invalidate()
+        createPowerEfficientTimer()
     }
     
     func stopMonitoring() {
         monitoringTimer?.invalidate()
         monitoringTimer = nil
         
+        // End background activity
+        powerManager.endBackgroundActivity(backgroundActivity)
+        backgroundActivity = nil
+        
+        // Remove power state observers
+        NotificationCenter.default.removeObserver(self)
+        
         // Clear servers array to prevent any lingering background tasks from accessing it
         servers.removeAll()
+        
+        print("⚡ Server monitoring stopped and background activity ended")
+    }
+    
+    func updateRefreshInterval() {
+        // Get current settings and update interval
+        let advancedSettings = settingsManager.getAdvancedSettings()
+        let newInterval = advancedSettings.customRefreshEnabled ? 
+            max(7.0, min(600.0, advancedSettings.refreshIntervalSeconds)) : 30.0
+        
+        // Only restart if the interval actually changed
+        if abs(newInterval - updateInterval) > 0.1 {
+            updateInterval = newInterval
+            
+            // If monitoring is active, restart with new interval
+            if monitoringTimer != nil {
+                let currentConfigs = servers.map { $0.config }
+                startMonitoring(servers: currentConfigs)
+            }
+        }
     }
     
     private func performMonitoringCheck() {
+        performPowerEfficientMonitoringCheck()
+    }
+    
+    private func performPowerEfficientMonitoringCheck() {
         let currentServers = servers // Capture current state
         
+        print("🔄 Starting monitoring check for \(currentServers.count) servers...")
+        
+        // Process each server individually to avoid blocking
         for (index, server) in currentServers.enumerated() {
-            // Perform monitoring in background
+            // Use background queue for monitoring
             DispatchQueue.global(qos: .utility).async { [weak self] in
-                let updatedServer = self?.monitorServer(server) ?? server
+                guard let self = self else { return }
+                
+                print("🔍 Monitoring server: \(server.config.name)")
+                let updatedServer = self.monitorServer(server)
                 
                 DispatchQueue.main.async {
                     // Safely update only if the server still exists at the same index
-                    guard let strongSelf = self,
-                          index < strongSelf.servers.count,
-                          strongSelf.servers[index].config.id == updatedServer.config.id else {
-                        return // Server was removed or array changed, skip update
+                    guard index < self.servers.count,
+                          self.servers[index].config.id == updatedServer.config.id else {
+                        print("⚠️ Server array changed, skipping update for \(server.config.name)")
+                        return
                     }
                     
-                    strongSelf.servers[index] = updatedServer
+                    self.servers[index] = updatedServer
                     
                     // Check notifications for this server
-                    strongSelf.settingsManager.checkServerMetrics(for: updatedServer)
+                    self.settingsManager.checkServerMetrics(for: updatedServer)
                     
-                    strongSelf.onDataUpdate?(strongSelf.servers)
+                    print("✅ Updated server: \(server.config.name) - Connected: \(updatedServer.isConnected)")
+                    
+                    // Notify UI of update
+                    self.onDataUpdate?(self.servers)
                 }
             }
         }

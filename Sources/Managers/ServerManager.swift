@@ -3,11 +3,9 @@ import Foundation
 class ServerManager {
     private let configFileName = ".Duman-secret"
     private let appSupportSubdirectory = "Duman"
-    private let keychainManager: KeychainManager
+    private let keychainManager = KeychainManager.shared
     
-    init(keychainManager: KeychainManager = KeychainManager()) {
-        self.keychainManager = keychainManager
-    }
+    init() {}
     
     private var configURL: URL {
         if let appSupportURL = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first {
