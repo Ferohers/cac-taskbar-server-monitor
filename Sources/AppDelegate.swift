@@ -18,6 +18,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         setupManagers()
         setupStatusBar()
+        setupMainMenu() // Call to setup the main menu
         requestNotificationPermissions()
         
         print("🚀 Duman starting...")
@@ -30,6 +31,66 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             print("✅ Configuration found, starting monitoring")
             startMonitoring()
         }
+    }
+    
+    private func setupMainMenu() {
+        let mainMenu = NSMenu()
+        NSApp.mainMenu = mainMenu
+        
+        // Application Menu
+        let appMenuItem = NSMenuItem()
+        mainMenu.addItem(appMenuItem)
+        let appMenu = NSMenu()
+        appMenuItem.submenu = appMenu
+        
+        appMenu.addItem(withTitle: "About Duman", action: #selector(NSApplication.orderFrontStandardAboutPanel(_:)), keyEquivalent: "")
+        appMenu.addItem(NSMenuItem.separator())
+        appMenu.addItem(withTitle: "Quit Duman", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+        
+        // Edit Menu
+        let editMenuItem = NSMenuItem(title: "Edit", action: nil, keyEquivalent: "")
+        mainMenu.addItem(editMenuItem)
+        let editMenu = NSMenu(title: "Edit")
+        editMenuItem.submenu = editMenu
+        
+        editMenu.addItem(withTitle: "Undo", action: #selector(undo(_:)), keyEquivalent: "z")
+        editMenu.addItem(withTitle: "Redo", action: #selector(redo(_:)), keyEquivalent: "Z")
+        editMenu.addItem(NSMenuItem.separator())
+        editMenu.addItem(withTitle: "Cut", action: #selector(cut(_:)), keyEquivalent: "x")
+        editMenu.addItem(withTitle: "Copy", action: #selector(copy(_:)), keyEquivalent: "c")
+        editMenu.addItem(withTitle: "Paste", action: #selector(paste(_:)), keyEquivalent: "v")
+        editMenu.addItem(withTitle: "Delete", action: #selector(delete(_:)), keyEquivalent: "")
+        editMenu.addItem(withTitle: "Select All", action: #selector(selectAll(_:)), keyEquivalent: "a")
+    }
+    
+    // MARK: - Standard Editing Actions (Forwarded to first responder)
+    
+    @objc func undo(_ sender: Any?) {
+        NSApp.sendAction(#selector(undo(_:)), to: nil, from: sender)
+    }
+    
+    @objc func redo(_ sender: Any?) {
+        NSApp.sendAction(#selector(redo(_:)), to: nil, from: sender)
+    }
+    
+    @objc func cut(_ sender: Any?) {
+        NSApp.sendAction(#selector(NSText.cut(_:)), to: nil, from: sender)
+    }
+    
+    @objc func copy(_ sender: Any?) {
+        NSApp.sendAction(#selector(NSText.copy(_:)), to: nil, from: sender)
+    }
+    
+    @objc func paste(_ sender: Any?) {
+        NSApp.sendAction(#selector(NSText.paste(_:)), to: nil, from: sender)
+    }
+    
+    @objc func delete(_ sender: Any?) {
+        NSApp.sendAction(#selector(NSText.delete(_:)), to: nil, from: sender)
+    }
+    
+    @objc func selectAll(_ sender: Any?) {
+        NSApp.sendAction(#selector(NSText.selectAll(_:)), to: nil, from: sender)
     }
     
     private func setupStatusBar() {
@@ -135,3 +196,5 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NotificationManager.shared.requestPermissions()
     }
 }
+
+
