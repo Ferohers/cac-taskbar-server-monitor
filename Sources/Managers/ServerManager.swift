@@ -3,7 +3,7 @@ import Foundation
 class ServerManager {
     private let configFileName = ".Duman-secret"
     private let appSupportSubdirectory = "Duman"
-    private let keychainManager = KeychainManager.shared
+    private let credentialManager = CredentialManager.shared
     
     init() {}
     
@@ -33,12 +33,11 @@ class ServerManager {
     
     func addServerWithCredentials(_ server: ServerConfig, password: String? = nil, keyPath: String? = nil) -> Bool {
         var updatedServer = server
-        let serverID = server.id.uuidString
         
         if let password = password, !password.isEmpty {
             do {
-                try keychainManager.storePassword(for: serverID, password: password)
-                updatedServer.hasKeychainPassword = true
+                let encryptedPassword = try credentialManager.encryptString(password)
+                updatedServer.encryptedPassword = encryptedPassword
             } catch {
                 return false
             }
@@ -46,8 +45,10 @@ class ServerManager {
         
         if let keyPath = keyPath, !keyPath.isEmpty {
             do {
-                try keychainManager.storeSSHKey(for: serverID, keyPath: keyPath)
-                updatedServer.hasKeychainSSHKey = true
+                // Read the SSH key file content
+                let sshKeyContent = try String(contentsOfFile: keyPath, encoding: .utf8)
+                let encryptedSSHKey = try credentialManager.encryptString(sshKeyContent)
+                updatedServer.encryptedSSHKey = encryptedSSHKey
             } catch {
                 return false
             }
@@ -67,16 +68,14 @@ class ServerManager {
     
     func updateServerWithCredentials(_ server: ServerConfig, password: String? = nil, keyPath: String? = nil) -> Bool {
         var updatedServer = server
-        let serverID = server.id.uuidString
         
         if let password = password {
             if password.isEmpty {
-                try? keychainManager.deletePassword(for: serverID)
-                updatedServer.hasKeychainPassword = false
+                updatedServer.encryptedPassword = nil
             } else {
                 do {
-                    try keychainManager.storePassword(for: serverID, password: password)
-                    updatedServer.hasKeychainPassword = true
+                    let encryptedPassword = try credentialManager.encryptString(password)
+                    updatedServer.encryptedPassword = encryptedPassword
                 } catch {
                     return false
                 }
@@ -85,12 +84,13 @@ class ServerManager {
         
         if let keyPath = keyPath {
             if keyPath.isEmpty {
-                try? keychainManager.deleteSSHKey(for: serverID)
-                updatedServer.hasKeychainSSHKey = false
+                updatedServer.encryptedSSHKey = nil
             } else {
                 do {
-                    try keychainManager.storeSSHKey(for: serverID, keyPath: keyPath)
-                    updatedServer.hasKeychainSSHKey = true
+                    // Read the SSH key file content
+                    let sshKeyContent = try String(contentsOfFile: keyPath, encoding: .utf8)
+                    let encryptedSSHKey = try credentialManager.encryptString(sshKeyContent)
+                    updatedServer.encryptedSSHKey = encryptedSSHKey
                 } catch {
                     return false
                 }
@@ -104,7 +104,7 @@ class ServerManager {
         var servers = getAllServers()
         servers.removeAll { $0.id == serverID }
         
-        keychainManager.cleanupCredentials(for: serverID.uuidString)
+        // No need to cleanup credentials since they're stored in the config file
         
         return saveServers(servers)
     }
@@ -193,22 +193,33 @@ class ServerManager {
     // MARK: - Credential Access
     
     func getServerPassword(for serverID: UUID) -> String? {
+        guard let server = getServer(withID: serverID),
+              let encryptedPassword = server.encryptedPassword else {
+            return nil
+        }
+        
         do {
-            return try keychainManager.retrievePassword(for: serverID.uuidString)
+            return try credentialManager.decryptString(encryptedPassword)
         } catch {
             return nil
         }
     }
     
     func getServerSSHKeyPath(for serverID: UUID) -> String? {
+        guard let server = getServer(withID: serverID),
+              let encryptedSSHKey = server.encryptedSSHKey else {
+            return nil
+        }
+        
         do {
-            return try keychainManager.writeSSHKeyToTempFile(for: serverID.uuidString)
+            let sshKeyContent = try credentialManager.decryptString(encryptedSSHKey)
+            return try credentialManager.writeSSHKeyToTempFile(sshKeyContent)
         } catch {
             return nil
         }
     }
     
-    func getKeychainManager() -> KeychainManager {
-        return keychainManager
+    func getCredentialManager() -> CredentialManager {
+        return credentialManager
     }
 }

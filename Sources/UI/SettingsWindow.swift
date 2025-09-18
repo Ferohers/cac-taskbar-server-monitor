@@ -446,10 +446,9 @@ class SettingsWindow: NSWindowController {
         ])
         
         NSLayoutConstraint.activate([
-            // Center the stack view vertically and horizontally
+            // Center the stack view horizontally and align to top
             stackView.centerXAnchor.constraint(equalTo: documentView.centerXAnchor),
-            stackView.centerYAnchor.constraint(equalTo: documentView.centerYAnchor),
-            stackView.topAnchor.constraint(greaterThanOrEqualTo: documentView.topAnchor, constant: 40),
+            stackView.topAnchor.constraint(equalTo: documentView.topAnchor, constant: 40),
             stackView.bottomAnchor.constraint(lessThanOrEqualTo: documentView.bottomAnchor, constant: -40),
             stackView.leadingAnchor.constraint(greaterThanOrEqualTo: documentView.leadingAnchor, constant: 40),
             stackView.trailingAnchor.constraint(lessThanOrEqualTo: documentView.trailingAnchor, constant: -40),

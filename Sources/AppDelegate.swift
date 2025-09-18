@@ -16,9 +16,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Initialize power management for menu bar app
         powerManager.optimizeForMenuBarApp()
         
-        // Request keychain permission early to avoid multiple prompts
-        let _ = KeychainManager.shared.requestKeychainPermission()
-        
         setupManagers()
         setupStatusBar()
         requestNotificationPermissions()

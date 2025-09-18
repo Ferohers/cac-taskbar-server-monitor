@@ -8,26 +8,26 @@ struct ServerConfig: Codable, Identifiable {
     var port: Int
     var isEnabled: Bool
     
-    // Keychain integration flags
-    var hasKeychainPassword: Bool
-    var hasKeychainSSHKey: Bool
+    // Encrypted credential storage
+    var encryptedPassword: String?
+    var encryptedSSHKey: String?
     
-    init(id: UUID = UUID(), name: String, hostname: String, username: String, port: Int = 22, isEnabled: Bool = true, hasKeychainPassword: Bool = false, hasKeychainSSHKey: Bool = false) {
+    init(id: UUID = UUID(), name: String, hostname: String, username: String, port: Int = 22, isEnabled: Bool = true, encryptedPassword: String? = nil, encryptedSSHKey: String? = nil) {
         self.id = id
         self.name = name
         self.hostname = hostname
         self.username = username
         self.port = port
         self.isEnabled = isEnabled
-        self.hasKeychainPassword = hasKeychainPassword
-        self.hasKeychainSSHKey = hasKeychainSSHKey
+        self.encryptedPassword = encryptedPassword
+        self.encryptedSSHKey = encryptedSSHKey
     }
     
     // Computed properties for authentication method
     var authenticationMethod: AuthenticationMethod {
-        if hasKeychainSSHKey {
+        if encryptedSSHKey != nil && !encryptedSSHKey!.isEmpty {
             return .sshKey
-        } else if hasKeychainPassword {
+        } else if encryptedPassword != nil && !encryptedPassword!.isEmpty {
             return .password
         } else {
             return .none
@@ -35,7 +35,8 @@ struct ServerConfig: Codable, Identifiable {
     }
     
     var hasCredentials: Bool {
-        return hasKeychainPassword || hasKeychainSSHKey
+        return (encryptedPassword != nil && !encryptedPassword!.isEmpty) || 
+               (encryptedSSHKey != nil && !encryptedSSHKey!.isEmpty)
     }
 }
 

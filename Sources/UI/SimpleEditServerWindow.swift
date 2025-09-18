@@ -126,13 +126,13 @@ class SimpleEditServerWindow: NSWindowController, NSWindowDelegate {
         userField.stringValue = serverToEdit.username
         portField.stringValue = String(serverToEdit.port)
         
-        // Handle keychain-stored credentials
-        if serverToEdit.hasKeychainPassword {
-            passField.placeholderString = "Password stored in keychain (leave empty to keep current)"
+        // Handle encrypted credential storage
+        if serverToEdit.encryptedPassword != nil && !serverToEdit.encryptedPassword!.isEmpty {
+            passField.placeholderString = "Password stored securely (leave empty to keep current)"
         }
         
-        if serverToEdit.hasKeychainSSHKey {
-            keyField.placeholderString = "SSH key stored in keychain (leave empty to keep current)"
+        if serverToEdit.encryptedSSHKey != nil && !serverToEdit.encryptedSSHKey!.isEmpty {
+            keyField.placeholderString = "SSH key stored securely (leave empty to keep current)"
         }
     }
     
@@ -149,7 +149,7 @@ class SimpleEditServerWindow: NSWindowController, NSWindowDelegate {
             return
         }
         
-        // Create updated server config preserving keychain flags
+        // Create updated server config preserving encrypted credentials
         let updatedServer = ServerConfig(
             id: serverToEdit.id,
             name: name,
@@ -157,8 +157,8 @@ class SimpleEditServerWindow: NSWindowController, NSWindowDelegate {
             username: user,
             port: port,
             isEnabled: serverToEdit.isEnabled,
-            hasKeychainPassword: serverToEdit.hasKeychainPassword,
-            hasKeychainSSHKey: serverToEdit.hasKeychainSSHKey
+            encryptedPassword: serverToEdit.encryptedPassword,
+            encryptedSSHKey: serverToEdit.encryptedSSHKey
         )
         
         // Validate the updated server
@@ -168,9 +168,9 @@ class SimpleEditServerWindow: NSWindowController, NSWindowDelegate {
             return
         }
         
-        // Use the new method that handles keychain storage
+        // Use the new method that handles encrypted credential storage
         if serverManager.updateServerWithCredentials(updatedServer, password: pass, keyPath: keyPath) {
-            print("✅ Server '\(updatedServer.name)' updated successfully with credentials in keychain.")
+            print("✅ Server '\(updatedServer.name)' updated successfully with encrypted credentials.")
             onServerUpdated?()
             self.close()
         } else {

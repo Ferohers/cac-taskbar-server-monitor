@@ -47,7 +47,7 @@ struct NetworkInfo {
 class SSHClient {
     private var isConnected = false
     private var serverConfig: ServerConfig?
-    private let keychainManager = KeychainManager.shared
+    private let credentialManager = CredentialManager.shared
     private var tempKeyFilePath: String?
     
     init() {}
@@ -74,10 +74,8 @@ class SSHClient {
         serverConfig = nil
         
         // Clean up temporary SSH key file if it exists
-        if let tempPath = tempKeyFilePath {
-            try? FileManager.default.removeItem(atPath: tempPath)
-            tempKeyFilePath = nil
-        }
+        credentialManager.cleanupTempFile(tempKeyFilePath)
+        tempKeyFilePath = nil
     }
     
     func getCPUInfo() throws -> CPUInfo? {
@@ -464,10 +462,11 @@ class SSHClient {
     private func buildSSHCommand(command: String, config: ServerConfig) throws -> String {
         var sshCommand = "ssh -o ConnectTimeout=15 -o ServerAliveInterval=10 -o ServerAliveCountMax=3 -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR"
         
-        // Handle SSH key authentication from keychain
-        if config.hasKeychainSSHKey {
+        // Handle SSH key authentication
+        if let encryptedSSHKey = config.encryptedSSHKey, !encryptedSSHKey.isEmpty {
             do {
-                let tempKeyPath = try keychainManager.writeSSHKeyToTempFile(for: config.id.uuidString)
+                let sshKeyContent = try credentialManager.decryptString(encryptedSSHKey)
+                let tempKeyPath = try credentialManager.writeSSHKeyToTempFile(sshKeyContent)
                 self.tempKeyFilePath = tempKeyPath
                 let escapedPath = tempKeyPath.replacingOccurrences(of: "'", with: "'\"'\"'")
                 sshCommand += " -i '\(escapedPath)'"
@@ -475,11 +474,11 @@ class SSHClient {
                 throw SSHError.authenticationFailed
             }
         }
-        // Handle password authentication from keychain
-        else if config.hasKeychainPassword {
+        // Handle password authentication
+        else if let encryptedPassword = config.encryptedPassword, !encryptedPassword.isEmpty {
             // For password authentication, we'll use sshpass if available
             do {
-                let password = try keychainManager.retrievePassword(for: config.id.uuidString)
+                let password = try credentialManager.decryptString(encryptedPassword)
                 let escapedPassword = password.replacingOccurrences(of: "'", with: "'\"'\"'")
                 sshCommand = "sshpass -p '\(escapedPassword)' " + sshCommand
             } catch {
